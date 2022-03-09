@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from numpy import squeeze
+# Optional package import
+try:
+    import SciDataTool
+except ImportError:
+    SciDataTool = None
 
-from SciDataTool import Data1D, DataTime, DataFreq
-
-from mosqito.functions.shared.A_weighting import A_weighting
-from mosqito.functions.oct3filter.calc_third_octave_levels import (
+from mosqito.functions.loudness_zwicker.calc_third_octave_levels import (
     calc_third_octave_levels,
 )
-from mosqito.functions.oct3filter.oct3spec import oct3spec
+from mosqito.functions.noct_spectrum.comp_noct_spectrum import comp_noct_spectrum
 
 
 def comp_3oct_spec(
@@ -26,30 +27,35 @@ def comp_3oct_spec(
         Filter center frequency of the highest 1/3 oct. band [Hz]
 
     """
+    
+    if SciDataTool is None:
+        raise RuntimeError(
+            "In order to create an audio object you need the 'SciDataTool' package."
+            )
+
 
     # Compute third octave band spectrum
     if self.is_stationary:
-        third_spec, freq_val = oct3spec(
-            self.signal.values, self.fs, fc_min=fc_min, fc_max=fc_max
+        third_spec, freq_val = comp_noct_spectrum(
+            self.signal.values, self.fs, fmin=fc_min, fmax=fc_max, n=3
         )
     else:
         third_spec, freq_val, time_val = calc_third_octave_levels(
             self.signal.values, self.fs
         )
-
-    # dB -> lin
-    # Todo clean all code related to db to lin, use SciDataTool if possible
-    third_spec = 2e-5 * 10 ** (third_spec / 20)
+        # dB -> lin
+        # Todo clean all code related to db to lin, use SciDataTool if possible
+        third_spec = 2e-5 * 10 ** (third_spec / 20)
 
     # Define axis objects
-    frequency = Data1D(
+    frequency = SciDataTool.Data1D(
         name="freqs",
         unit="Hz",
         values=freq_val,
     )
     axes = [frequency]
     if not self.is_stationary:
-        time = Data1D(
+        time = SciDataTool.Data1D(
             name="time",
             unit="s",
             values=time_val,
@@ -57,7 +63,7 @@ def comp_3oct_spec(
         axes.append(time)
 
     # Define Data object
-    self.third_spec = DataFreq(
+    self.third_spec = SciDataTool.DataFreq(
         name="Audio signal",
         symbol="x",
         axes=axes,

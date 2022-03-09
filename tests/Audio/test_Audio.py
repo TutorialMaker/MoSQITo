@@ -4,7 +4,16 @@ Created on Mon Feb 15 18:06:47 2021
 
 @author: Mesure_07
 """
-import pytest
+
+# Optional package import
+try:
+    import pytest
+except ImportError:
+    raise RuntimeError(
+        "In order to perform the tests you need the 'pytest' package."
+        )
+
+
 from mosqito.classes.Audio import Audio
 from mosqito import COLORS
 
@@ -169,11 +178,17 @@ def test_compute_tnr_pr(fixture_import_signal):
 @pytest.mark.audio
 def test_compute_tnr_pr_time(fixture_import_signal_time):
     audio = fixture_import_signal_time
+
     audio.compute_tnr_pr(method="all")
     audio.tonality["tnr"].plot_3D_Data(
-        "time",
         "freqs",
+        "time",
         is_2D_view=True,
         is_show_fig=is_show_fig,
         save_path=out_path + "test_Audio_compute_tnr_pr_time.png",
     )
+
+
+# test of the function
+if __name__ == "__main__":
+    test_compute_tnr_pr_time()

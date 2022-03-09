@@ -5,9 +5,15 @@ Created on Wed Dec 16 09:20:41 2020
 @author: wantysal
 """
 
-# Standard imports
 import numpy as np
-import pytest
+# Optional package import
+try:
+    import pytest
+except ImportError:
+    raise RuntimeError(
+        "In order to perform the tests you need the 'pytest' package."
+        )
+
 
 # Local application imports
 from mosqito.functions.shared.load import load
@@ -36,12 +42,11 @@ def test_sharpness():
     signal = {"data_file": r"tests\input\1KHZ60DB.wav", "S": 1}
 
     # Load signal
-    sig, fs = load(True, signal["data_file"], calib=1)
+    sig, fs = load(signal["data_file"], calib=1)
 
     # Compute sharpness
     sharpness = comp_sharpness(True, sig, fs, method="din")
     S = sharpness["values"]
-
     assert check_compliance(S, signal)
 
 

@@ -5,10 +5,15 @@ Created on Mon Dec 14 15:16:38 2020
 @author: wantysal
 """
 
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    raise RuntimeError(
+        "In order to perform this validation you need the 'matplotlib' package."
+        )
 
 # Third party imports
 import numpy as np
-import matplotlib.pyplot as plt
 from pandas import ExcelFile, read_excel
 
 # Local application imports
@@ -21,141 +26,141 @@ from mosqito.functions.shared.load import load
 signal = np.zeros((20), dtype=dict)
 
 signal[0] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Test signal 6 (tone 250 Hz 30 dB - 80 dB).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.4/Test signal 6 (tone 250 Hz 30 dB - 80 dB).wav",
+    "xls": "./data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
     "tab": "Test signal 6",
     "N_specif_bark": 2.5,
     "field": "free",
 }
 signal[1] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Test signal 7 (tone 1 kHz 30 dB - 80 dB).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.4/Test signal 7 (tone 1 kHz 30 dB - 80 dB).wav",
+    "xls": "./data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
     "tab": "Test signal 7",
     "N_specif_bark": 8.5,
     "field": "free",
 }
 signal[2] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Test signal 8 (tone 4 kHz 30 dB - 80 dB).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.4/Test signal 8 (tone 4 kHz 30 dB - 80 dB).wav",
+    "xls": "./data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
     "tab": "Test signal 8",
     "N_specif_bark": 17.5,
     "field": "free",
 }
 signal[3] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Test signal 9 (pink noise 0 dB - 50 dB).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.4/Test signal 9 (pink noise 0 dB - 50 dB).wav",
+    "xls": "./data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
     "tab": "Test signal 9",
     "N_specif_bark": 17.5,
     "field": "free",
 }
 signal[4] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Test signal 10 (tone pulse 1 kHz 10 ms 70 dB).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.4/Test signal 10 (tone pulse 1 kHz 10 ms 70 dB).wav",
+    "xls": "./data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
     "tab": "Test signal 10",
     "N_specif_bark": 8.5,
     "field": "free",
 }
 signal[5] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Test signal 11 (tone pulse 1 kHz 50 ms 70 dB).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.4/Test signal 11 (tone pulse 1 kHz 50 ms 70 dB).wav",
+    "xls": "./data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
     "tab": "Test signal 11",
     "N_specif_bark": 8.5,
     "field": "free",
 }
 signal[6] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Test signal 12 (tone pulse 1 kHz 500 ms 70 dB).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.4/Test signal 12 (tone pulse 1 kHz 500 ms 70 dB).wav",
+    "xls": "./data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
     "tab": "Test signal 12",
     "N_specif_bark": 8.5,
     "field": "free",
 }
 signal[7] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Test signal 13 (combined tone pulses 1 kHz).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.4/Test signal 13 (combined tone pulses 1 kHz).wav",
+    "xls": "./data/ISO_532-1/Annex B.4/Results and tests for synthetic signals (time varying loudness).xlsx",
     "tab": "Test signal 13",
     "N_specif_bark": 8.5,
     "field": "free",
 }
 signal[8] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Test signal 14 (propeller-driven airplane).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.5/Test signal 14 (propeller-driven airplane).wav",
+    "xls": "./data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
     "tab": "Test signal 14",
     "N_specif_bark": -1,
     "field": "free",
 }
 signal[9] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Test signal 15 (vehicle interior 40 kmh).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.5/Test signal 15 (vehicle interior 40 kmh).wav",
+    "xls": "./data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
     "tab": "Test signal 15",
     "N_specif_bark": -1,
     "field": "diffuse",
 }
 signal[10] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Test signal 16 (hairdryer).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.5/Test signal 16 (hairdryer).wav",
+    "xls": "./data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
     "tab": "Test signal 16",
     "N_specif_bark": -1,
     "field": "free",
 }
 signal[11] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Test signal 17 (machine gun).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.5/Test signal 17 (machine gun).wav",
+    "xls": "./data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
     "tab": "Test signal 17",
     "N_specif_bark": -1,
     "field": "free",
 }
 signal[12] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Test signal 18 (hammer).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.5/Test signal 18 (hammer).wav",
+    "xls": "./data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
     "tab": "Test signal 18",
     "N_specif_bark": -1,
     "field": "free",
 }
 signal[13] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Test signal 19 (door creak).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.5/Test signal 19 (door creak).wav",
+    "xls": "./data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
     "tab": "Test signal 19",
     "N_specif_bark": -1,
     "field": "free",
 }
 signal[14] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Test signal 20 (shaking coins).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.5/Test signal 20 (shaking coins).wav",
+    "xls": "./data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
     "tab": "Test signal 20",
     "N_specif_bark": -1,
     "field": "free",
 }
 signal[15] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Test signal 21 (jackhammer).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.5/Test signal 21 (jackhammer).wav",
+    "xls": "./data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
     "tab": "Test signal 21",
     "N_specif_bark": -1,
     "field": "free",
 }
 signal[16] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Test signal 22 (ratchet wheel (large)).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.5/Test signal 22 (ratchet wheel (large)).wav",
+    "xls": "./data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
     "tab": "Test signal 22",
     "N_specif_bark": -1,
     "field": "free",
 }
 signal[17] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Test signal 23 (typewriter).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.5/Test signal 23 (typewriter).wav",
+    "xls": "./data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
     "tab": "Test signal 23",
     "N_specif_bark": -1,
     "field": "free",
 }
 signal[18] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Test signal 24 (woodpecker).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.5/Test signal 24 (woodpecker).wav",
+    "xls": "./data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
     "tab": "Test signal 24",
     "N_specif_bark": -1,
     "field": "free",
 }
 signal[19] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Test signal 25 (full can rattle).wav",
-    "xls": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
+    "data_file": "./data/ISO_532-1/Annex B.5/Test signal 25 (full can rattle).wav",
+    "xls": "./data/ISO_532-1/Annex B.5/Results and tests for technical signals (time varying loudness).xlsx",
     "tab": "Test signal 25",
     "N_specif_bark": -1,
     "field": "free",
@@ -186,16 +191,16 @@ def validation_loudness_zwicker_time(signal):
     """
 
     # Load signal and compute third octave band spectrum
-    sig, fs = load(False, signal["data_file"], calib=2 * 2 ** 0.5)
+    sig, fs = load(signal["data_file"], calib=2 * 2 ** 0.5)
 
     # Compute Loudness
     loudness = comp_loudness(False, sig, fs, signal["field"])
 
     # Check ISO 532-1 compliance
-    assert check_compliance(loudness, signal)
+    check_compliance(loudness, signal, "./output/")
 
 
-def check_compliance(loudness, signal):
+def check_compliance(loudness, signal, out_dir):
     """Check the comppiance of loudness calc. to ISO 532-1
 
     Check the compliance of the input data N and N_specific
@@ -204,13 +209,17 @@ def check_compliance(loudness, signal):
 
     Parameters
     ----------
-    N : float
-        Calculated loudness [sones]
-    N_specific : numpy.ndarray
-        Specific loudness [sones/bark]
-    bark_axis : numpy.ndarray
-        Corresponding bark axis
-    signal : dict
+    loudness: dict
+        {
+            "name": "Loudness",
+            "values": N: float/numpy.array
+                loudness value
+            "specific values": N_specific: numpy.array
+                specific loudness values
+            "freqs": bark_axis: numpy.array
+                frequency axis corresponding to N_specific values in bark
+        }
+    signal: dict
         {
             "data_file": <Path to reference input signal>,
             "N_file": <Path to reference calculated loudness versus time>
@@ -218,6 +227,8 @@ def check_compliance(loudness, signal):
             "N_specif_bark": <Bark value of the reference calculation>
         }
         Dictionary containing link to ref. data
+    out_dir: str
+        path to the directory to store the results
 
     Outputs
     -------
@@ -412,7 +423,7 @@ def check_compliance(loudness, signal):
             else:
                 flag = "FAILED_"
             plt.savefig(
-                "./mosqito/validations/loudness_zwicker/output/"
+                out_dir
                 + flag
                 + "validation_loudness_zwicker_time_"
                 + file_name.split("/")[-1][:-4]

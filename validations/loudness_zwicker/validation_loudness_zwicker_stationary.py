@@ -5,10 +5,15 @@ Created on Mon Dec 14 15:17:12 2020
 @author: wantysal
 """
 
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    raise RuntimeError(
+        "In order to perform this validation you need the 'matplotlib' package."
+        )
 
 # Third party imports
 import numpy as np
-import matplotlib.pyplot as plt
 
 # Local application imports
 from mosqito.functions.loudness_zwicker.comp_loudness import comp_loudness
@@ -73,13 +78,12 @@ def validation_loudness_zwicker_3oct():
     signal = {
         "data_file": "Test signal 1.txt",
         "N": 83.296,
-        "N_specif_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/test_signal_1.csv",
+        "N_specif_file": "./data/ISO_532-1/test_signal_1.csv",
     }
 
     N, N_specific = loudness_zwicker_stationary(test_signal_1)
     loudness = {"values": N, "specific values": N_specific}
-    tst = check_compliance(loudness, signal)
-    assert tst
+    _ = check_compliance(loudness, signal, "./output/")
 
     # Test signal as input for stationary loudness
     # (from ISO 532-1 annex B3)
@@ -88,24 +92,24 @@ def validation_loudness_zwicker_3oct():
 signal = np.zeros((4), dtype=dict)
 
 signal[0] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Test signal 2 (250 Hz 80 dB).wav",
+    "data_file": "./data/ISO_532-1/Test signal 2 (250 Hz 80 dB).wav",
     "N": 14.655,
-    "N_specif_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/test_signal_2.csv",
+    "N_specif_file": "./data/ISO_532-1/test_signal_2.csv",
 }
 signal[1] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Test signal 3 (1 kHz 60 dB).wav",
+    "data_file": "./data/ISO_532-1/Test signal 3 (1 kHz 60 dB).wav",
     "N": 4.019,
-    "N_specif_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/test_signal_3.csv",
+    "N_specif_file": "./data/ISO_532-1/test_signal_3.csv",
 }
 signal[2] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Test signal 4 (4 kHz 40 dB).wav",
+    "data_file": "./data/ISO_532-1/Test signal 4 (4 kHz 40 dB).wav",
     "N": 1.549,
-    "N_specif_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/test_signal_4.csv",
+    "N_specif_file": "./data/ISO_532-1/test_signal_4.csv",
 }
 signal[3] = {
-    "data_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/Test signal 5 (pinknoise 60 dB).wav",
+    "data_file": "./data/ISO_532-1/Test signal 5 (pinknoise 60 dB).wav",
     "N": 10.498,
-    "N_specif_file": "./mosqito/validations/loudness_zwicker/data/ISO_532-1/test_signal_5.csv",
+    "N_specif_file": "./data/ISO_532-1/test_signal_5.csv",
 }
 
 
@@ -127,17 +131,17 @@ def validation_loudness_zwicker_wav(signal):
     """
 
     # Load signal and compute third octave band spectrum
-    sig, fs = load(True, signal["data_file"], calib=2 * 2 ** 0.5)
+    sig, fs = load(signal["data_file"], calib=2 * 2 ** 0.5)
 
     # Compute Loudness
     loudness = comp_loudness(True, sig, fs)
 
     # Check ISO 532-1 compliance
-    assert check_compliance(loudness, signal)
+    _ = check_compliance(loudness, signal, "./output/")
 
 
-def check_compliance(loudness, iso_ref):
-    """Check the comppiance of loudness calc. to ISO 532-1
+def check_compliance(loudness, iso_ref, out_dir):
+    """Check the compliance of loudness calc. to ISO 532-1
 
     Check the compliance of the input data N and N_specific
     to section 5.1 of ISO 532-1 by using the reference data
@@ -145,19 +149,25 @@ def check_compliance(loudness, iso_ref):
 
     Parameters
     ----------
-    N : float
-        Calculated loudness [sones]
-    N_specific : numpy.ndarray
-        Specific loudness [sones/bark]
-    bark_axis : numpy.ndarray
-        Corresponding bark axis
-    iso_ref : dict
+    loudness: dict
+        {
+            "name": "Loudness",
+            "values": N: float/numpy.array
+                loudness value
+            "specific values": N_specific: numpy.array
+                specific loudness values
+            "freqs": bark_axis: numpy.array
+                frequency axis corresponding to N_specific values in bark
+        }
+    iso_ref: dict
         {
             "data_file": <Path to reference input signal>,
             "N": <Reference loudness value>,
             "N_specif_file": <Path to reference calculated specific loudness>
         }
         Dictionary containing link to ref. data
+    out_dir: str
+        path to the directory to store the results
 
     Outputs
     -------
@@ -171,7 +181,6 @@ def check_compliance(loudness, iso_ref):
     # Extract mosqito calculated values
     N = loudness["values"]
     N_specific = loudness["specific values"]
-
     # Test for ISO 532-1 comformance (section 5.1)
     tst_N = (
         N >= N_iso * 0.95
@@ -236,7 +245,7 @@ def check_compliance(loudness, iso_ref):
     plt.title("N = " + str(N) + " sone (ISO ref. " + str(N_iso) + " sone)", color=clr)
     file_name = "_".join(iso_ref["data_file"].split(" "))
     plt.savefig(
-        "./mosqito/validations/loudness_zwicker/output/"
+        out_dir
         + "validation_loudness_zwicker_stationary_"
         + file_name.split("/")[-1][:-4]
         + ".png",

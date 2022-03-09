@@ -5,7 +5,14 @@ Created on Mon Feb  8 10:41:09 2021
 @author: wantysal
 """
 
-import pytest
+# Optional package import
+try:
+    import pytest
+except ImportError:
+    raise RuntimeError(
+        "In order to perform the tests you need the 'pytest' package."
+        )
+
 
 # Local application imports
 from mosqito.functions.shared.load import load
@@ -48,6 +55,10 @@ def test_pr():
 
     for i in range(len(signal)):
         # Load signal
-        audio, fs = load(signal[i]["is_stationary"], signal[i]["data_file"])
+        audio, fs = load(signal[i]["data_file"])
         # Compute tone-to-noise ratio
         pr = comp_pr(signal[i]["is_stationary"], audio, fs, prominence=True)
+
+
+if __name__ == "__main__":
+    test_pr()

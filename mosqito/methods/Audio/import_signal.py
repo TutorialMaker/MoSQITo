@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from mosqito.functions.shared.load import load
-from SciDataTool import DataTime, DataLinspace
+# Optional package import
+try:
+    import SciDataTool
+except ImportError:
+    SciDataTool = None
 
 
 def import_signal(self, is_stationary, file, calib=1, mat_signal="", mat_fs=""):
@@ -31,13 +35,16 @@ def import_signal(self, is_stationary, file, calib=1, mat_signal="", mat_fs=""):
         sampling frequency
 
     """
+    if SciDataTool is None:
+        raise RuntimeError(
+            "In order to create an audio object you need the 'SciDataTool' package."
+            )
 
     # Init Audio object
     self.__init__()
 
     # Import audio signal
     values, fs = load(
-        is_stationary,
         file,
         calib=calib,
         mat_signal=mat_signal,
@@ -45,7 +52,7 @@ def import_signal(self, is_stationary, file, calib=1, mat_signal="", mat_fs=""):
     )
 
     # Create Data object for time axis
-    time_axis = DataLinspace(
+    time_axis = SciDataTool.DataLinspace(
         name="time",
         unit="s",
         initial=0,
@@ -57,7 +64,7 @@ def import_signal(self, is_stationary, file, calib=1, mat_signal="", mat_fs=""):
     # Create audio signal Data object
     self.fs = fs
     self.is_stationary = is_stationary
-    self.signal = DataTime(
+    self.signal = SciDataTool.DataTime(
         name="Audio signal",
         symbol="x",
         unit="Pa",
